@@ -12,7 +12,10 @@
   h1 {
     color: purple;
   }
+  h2 {
+    color: orange;
+  }
 </style>
 
 <h1>{message}</h1>
-<h2>Change me!</h2>
+<h2>Change me now!</h2>
