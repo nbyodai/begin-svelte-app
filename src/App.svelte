@@ -1,21 +1,36 @@
+<svelte:head>
+  <meta charset="UTF-8">
+  <title>Chibuzor's Beninging</title>
+  <script type="text/javascript" src="https://sdk.userbase.com/1/userbase.js"></script>
+	<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</svelte:head>
 <script>
   import { onMount } from 'svelte'
-  export let message;
-  onMount(async () => {
-    let data = await (await fetch('/api')).json()
-    message = data.msg
-    console.log('MESSAGE: ', message)
+	
+	onMount(async () => {
+    userbase.init({ appId: 'a19d663f-599e-4878-ba3b-c435c3e4b672' })
   })
+  
+  let username;
+  let password;
+  let error;
+  
+  function handleCreateAccount() {
+    userbase.signUp({ username, password, rememberMe: 'none' })
+    .then((user) => alert('You signed up!'))
+    .catch((e) => error = e)
+  }
+
 </script>
 
-<style>
-  h1 {
-    color: purple;
-  }
-  h2 {
-    color: orange;
-  }
-</style>
-
-<h1>{message}</h1>
-<h2>Change me now!</h2>
+<div id="auth-view" class="container flex flex-col items-center bg-gray-100 h-screen">
+	<h1 class="uppercase m-2 font-semibold text-3xl text-blue-300">Create an account</h1>
+	<form id="signup-form" class="flex flex-col items-center bg-gray-200 mt-8 w-1/2">
+		<input id="signup-username" class="border-dashed border-2 border-blue-200 border-2 rounded-lg w-1/2 mt-4 p-2 focus:outline-none" type="text" required placeholder="Username" bind:value={username}>
+		<input id="signup-password" class="border-dashed border-2 border-blue-200 border-2 rounded-lg w-1/2 mt-4 p-2 focus:outline-none" type="password" required placeholder="Password" bind:value={password}>
+		<button class="bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-4 border border-blue-300 rounded my-4 w-2/3" on:click={handleCreateAccount}> Create an account</button>
+	</form>
+	{#if error}
+	<div id="signup-error">{error}</div>
+	{/if}
+</div>
